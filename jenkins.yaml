@@ -51,7 +51,6 @@ provisioner: efs.csi.aws.com
 parameters:
   fileSystemId: fs-0c481e9be904d8843
   directoryPerms: "777"
-  provisioningMode: efs-ap
   reclaimPolicy: Retain
 ---
 apiVersion: v1
@@ -68,7 +67,7 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-0c481e9be904d8843
+    volumeHandle: fs-0c481e9be904d8843:/ # Ensure the correct format
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -112,7 +111,7 @@ spec:
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
       volumes:
         - name: jenkins-home
           persistentVolumeClaim:
